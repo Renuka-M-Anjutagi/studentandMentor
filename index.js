@@ -1,18 +1,26 @@
-// File handeling
-const { error } = require('console');
-const fs = require('fs');
+// import the app module
+const app = require('./app');
 
-/// write file
+// import the mongoose module
+const mongoose = require('mongoose');
 
-const data1 = Date();
+// log the message connecting to the MongoDB
+console.log('Connecting to MongoDB...');
 
-fs.writeFile('date-time.txt', data1 , (err) => {
+// import config module
+const config = require('./utils/config');
 
-  if(err){
-    console.log(err);
-    return;
-  }
-  console.log(data1);
-  console.log('File write successfully');
-});
+mongoose.connect(config.MONGODB_URI)
+  .then(
+    () => {
+      console.log('Connected to MongoDB');
 
+      // start the server
+      app.listen(3001, () => {
+        console.log('Server is running on http://localhost:3001');
+      });
+    }
+  )
+  .catch((error) => {
+    console.error('Error connecting to MongoDB: ', error.message);
+  });
