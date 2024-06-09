@@ -91,6 +91,168 @@ const userController = {
             response.status(500).json({ message: error.message });
         }
     
+    },
+    // define the getUser method
+    getUser: async (request, response) => {
+        try {
+            // get the user id from the request object
+            const userId = request.userId;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // if the user exists, return the user
+            response.json({ message: 'User found', user });
+        } catch(error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    // define the updateUser method
+    updateUser: async (request, response) => {
+        try {
+            // get the user id from the request object
+            const userId = request.userId;
+
+            // get the user input from the request body
+            const { username, name,role } = request.body;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // update the user
+            user.username = username ? username : user.username;
+            user.name = name ? name : user.name;
+            user.role = role ? name : user.role;
+
+            // save the updated user
+            const updatedUser = await user.save();
+
+            // return a success message and the updated user
+            response.json({ message: 'User updated', user: updatedUser });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    // define the deleteUser method
+    deleteUser: async (request, response) => {
+        try {
+            // get the user id from the request object
+            const userId = request.userId;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // delete the user
+            await User.findByIdAndDelete(userId);
+
+            // clear the token cookie
+            response.clearCookie('token');
+
+            // return a success message
+            response.json({ message: 'User deleted' });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    // define the getUsers method
+    getUsers: async (request, response) => {
+        try {
+            // find all the users in the database
+            const users = await User.find();
+
+            // return the users
+            response.json({ message: 'Users found', users });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    // define the getUserById method
+    getUserById: async (request, response) => {
+        try {
+            // get the user id from the request parameters
+            const userId = request.params.id;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // return the user
+            response.json({ message: 'User found', user });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+     // define the updateUserById method
+     updateUserById: async (request, response) => {
+        try {
+            // get the user id from the request parameters
+            const userId = request.params.id;
+
+            // get the user input from the request body
+            const { username, name } = request.body;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // update the user
+            user.username = username ? username : user.username;
+            user.name = name ? name : user.name;
+
+            // save the updated user
+            const updatedUser = await user.save();
+
+            // return a success message and the updated user
+            response.json({ message: 'User updated', user: updatedUser });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    // define the deleteUserById method
+    deleteUserById: async (request, response) => {
+        try {
+            // get the user id from the request parameters
+            const userId = request.params.id;
+
+            // find the user by id in the database
+            const user = await User.findById(userId);
+
+            // if the user does not exist, return an error
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' });
+            }
+
+            // delete the user
+            await User.findByIdAndDelete(userId);
+
+            // return a success message
+            response.json({ message: 'User deleted' });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
     }
 } 
 

@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const userRouter = require('./routes/userRoutes');
+const companyRouter = require('./routes/companyRoutes');
+const jobRouter = require('./routes/jobRoutes');
+const studentRoute = require("./routes/student");
+const mentorRoute = require("./routes/mentor");
+const assignMentortoStudent = require("./routes/assignMentortoStudent");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
@@ -22,6 +27,12 @@ app.use(morgan('dev'));
 
 // defining the endpoints or routes
 app.use('/users', userRouter);
+app.use('/companies', companyRouter);
+app.use('/jobs', jobRouter);
 
+
+app.use("/student", studentRoute);
+app.use("/mentor", mentorRoute);
+app.use("/assignmentor", assignMentortoStudent);
 // export the app module
 module.exports = app;
